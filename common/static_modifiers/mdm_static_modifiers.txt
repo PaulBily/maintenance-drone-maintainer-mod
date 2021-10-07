@@ -1,0 +1,5 @@
+maintenance_drone_maintainer = {
+	icon = "gfx/interface/icons/jobs/job_maintenance_drone.dds"
+	icon_frame = 2
+	job_maintenance_drone_add = 1
+}

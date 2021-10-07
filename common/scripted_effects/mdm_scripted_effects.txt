@@ -1,0 +1,143 @@
+check_maintain_maintenance_drones = {
+	if = {
+		limit = {
+			owner = {
+				has_edict = enable_maintenance_drone_maintainer
+			}
+		}
+		maintain_planet_maintenance_drones = yes
+	}
+	else_if = {
+		limit = {
+			has_modifier = maintenance_drone_maintainer
+		}
+		remove_modifier = maintenance_drone_maintainer
+		clear_variable = neg_drone_count
+	}
+}
+
+maintain_planet_maintenance_drones = {
+	if = {
+		limit = {
+			NAND = {
+				is_variable_set = neg_drone_count
+				has_modifier = maintenance_drone_maintainer
+			}
+		}
+		set_variable = {
+			which = neg_drone_count
+			value = 0
+		}
+		update_drone_modifier = {
+			MULT = neg_drone_count
+		}
+	}
+	export_trigger_value_to_variable = {
+		trigger = free_amenities
+		variable = current_amenities
+	}
+	export_modifier_to_variable = {
+		modifier = planet_amenities_mult
+		variable = amen_mods
+	}
+	export_modifier_to_variable = {
+		modifier = planet_amenities_no_happiness_mult
+		variable = amen_mods_no_hap
+	}
+	change_variable = {
+		which = amen_mods
+		value = amen_mods_no_hap
+	}
+	change_variable = {
+		which = amen_mods
+		value = 1
+	}
+	divide_variable = {
+		which = current_amenities
+		value = amen_mods
+	}
+	if = {
+		# Assume a drone provides 5 amenities in the positive case.
+		# (Has Charismatic or Emotion Emulators)
+		limit = {
+			check_variable = {
+				which = current_amenities
+				value >= 5
+			}
+			num_assigned_jobs = {
+				job = "maintenance_drone"
+				value > 0
+			}
+		}
+		divide_variable = {
+			which = current_amenities
+			value = 5
+		}
+		floor_variable = current_amenities
+		subtract_variable = {
+			which = neg_drone_count
+			value = current_amenities
+		}
+		update_drone_modifier = {
+			MULT = neg_drone_count
+		}
+		redo_worker_drones = yes
+	}
+	else_if = {
+		# Assume a drone provides default 4 amenities in the negative case.
+		limit = {
+			check_variable = {
+				which = current_amenities
+				value < 0
+			}
+			NOT = {
+				has_available_jobs = "maintenance_drone"
+			}
+		}
+		divide_variable = {
+			which = current_amenities
+			value = 4
+		}
+		floor_variable = current_amenities
+		subtract_variable = {
+			which = neg_drone_count
+			value = current_amenities
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = neg_drone_count
+					value > 0
+				}
+			}
+			set_variable = {
+				which = neg_drone_count
+				value = 0
+			}
+		}
+		update_drone_modifier = {
+			MULT = neg_drone_count
+		}
+		redo_worker_drones = yes
+	}
+}
+
+update_drone_modifier = {
+	remove_modifier = maintenance_drone_maintainer
+	add_modifier = {
+		modifier = maintenance_drone_maintainer
+		days = -1
+		multiplier = $MULT$
+		clear_on_owner_change = yes
+	}
+}
+
+redo_worker_drones = {
+	every_owned_pop = {
+		limit = {
+			has_job_category = worker
+		}
+		unemploy_pop = yes
+	}
+	check_planet_employment = yes
+}

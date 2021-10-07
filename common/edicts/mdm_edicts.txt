@@ -1,0 +1,23 @@
+enable_maintenance_drone_maintainer = {
+	length = -1
+	icon = "GFX_edict_type_policy"
+	edict_cap_usage = 0
+	ai_weight = {
+		weight = 0
+	}
+	potential = {
+		is_gestalt = yes
+		is_ai = no
+	}
+	effect = {
+		hidden_effect = {
+			every_owned_planet = {
+				limit = {
+					is_colony = yes
+					num_pops > 0
+				}
+				maintain_planet_maintenance_drones = yes
+			}
+		}
+	}
+}

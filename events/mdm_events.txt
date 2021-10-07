@@ -1,0 +1,19 @@
+namespace = mdm_events
+country_event = {
+	id = mdm_events.11
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		is_gestalt = yes
+		is_ai = no
+	}
+	immediate = {
+		every_owned_planet = {
+			limit = {
+				is_colony = yes
+				num_pops > 0
+			}
+			check_maintain_maintenance_drones = yes
+		}
+	}
+}

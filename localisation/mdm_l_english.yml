@@ -1,0 +1,6 @@
+﻿l_english:
+ maintenance_drone_maintainer:0 "Maintenance Drone Maintainer"
+ maintenance_drone_maintainer_desc:0 "Maintenance drone jobs are limited on this planet to reduce excess amenities."
+
+ edict_enable_maintenance_drone_maintainer:0 "Activate Maintenance Drone Maintainer"
+ edict_enable_maintenance_drone_maintainer_desc:0 "Planets will have maintenance drone jobs reduced in proportion to excess amenities. Updates every month to keep amenities above 0."
